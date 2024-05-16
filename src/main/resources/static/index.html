@@ -1,0 +1,196 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Crypto Dashboard</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Crypto Dashboard</h1>-->
+<!--<table id="cryptoTable">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Name</th>-->
+<!--        <th>Amount</th>-->
+<!--        <th>Deposit</th>-->
+<!--        <th>Withdrawal</th>-->
+<!--        <th>Current Price</th>-->
+<!--        <th>Current Balance</th>-->
+<!--        <th>Loss/Profit</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody id="cryptoTableBody">-->
+<!--    &lt;!&ndash; Table rows will be added dynamically via JavaScript &ndash;&gt;-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<button onclick="buyCoin()">Buy</button>-->
+<!--<button onclick="sellCoin()">Sell</button>-->
+<!--<button onclick="updatePrices()">Update</button>-->
+<!--<script src="script.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coins</title>
+
+</head>
+<body>
+<table id="coinsTable">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Deposit</th>
+        <th>Withdrawal</th>
+        <th>Current Price</th>
+        <th>Current Balance</th>
+        <th>Loss Profit</th>
+    </tr>
+    </thead>
+    <tbody id="coinTableBody">
+
+    </tbody>
+
+</table>
+<style>
+    table {
+        border-collapse: collapse; /* Объединяем границы ячеек */
+        width: 100%; /* Ширина таблицы */
+    }
+
+    /* Применяем стили к заголовкам столбцов */
+    th {
+        background-color: #f2f2f2; /* Задаем серый цвет фона */
+        border: 1px solid #dddddd; /* Задаем границу для заголовков */
+        padding: 8px; /* Задаем отступ внутри ячеек */
+        text-align: left; /* Выравниваем текст по левому краю */
+    }
+
+    /* Применяем стили к ячейкам */
+    td {
+        border: 1px solid #dddddd; /* Задаем границу для ячеек */
+        padding: 8px; /* Задаем отступ внутри ячеек */
+        text-align: left; /* Выравниваем текст по левому краю */
+    }
+
+    /* Применяем стили для четных строк */
+    tr:nth-child(even) {
+        background-color: #f2f2f2; /* Задаем светло-серый цвет фона для четных строк */
+    }
+    .modal {
+        display: none; /* Скрываем модальное окно по умолчанию */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Полупрозрачный черный фон */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+<button onclick="buyCoin()">Buy</button>
+<button onclick="sellCoin()">Sell</button>
+<button onclick="getHistory()">History</button>
+<button onclick="checkLossCoin()">Check loss</button>
+<button onclick="findBest()">What take?</button>
+<button onclick="updatePrices()">Update</button>
+
+</body>
+<!-- Модальное окно -->
+<div id="sellBuyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <!-- Форма для покупки/продажи монеты -->
+        <form id="coinForm">
+            <label for="coinName">Coin Name:</label>
+            <select id="coinName" name="coinName">
+
+                <!-- Добавьте остальные варианты монет -->
+            </select>
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" name="amount">
+            <label for="opTime">Operation Time:</label>
+            <input type="datetime-local" id="opTime" name="opTime">
+            <input type="text" id="operationPrice" name="operationPrice">
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
+</div>
+<div id="historyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('historyModal')">&times;</span>
+        <!-- Форма для истории покупок одной монеты -->
+        <form id="historyForm">
+            <label for="coinHistoryName">Coin Name:</label>
+            <select id="coinHistoryName" name="coinHistoryName">
+
+                <!-- Добавьте остальные варианты монет -->
+            </select>
+            <table id="historyTable">
+                <thead>
+                <tr>
+                    <th>id</th>
+<!--                    <th>name</th>-->
+                    <th>amount</th>
+                    <th>opTime</th>
+                    <th>operationPrice</th>
+                </tr>
+                </thead>
+                <tbody id="historyTableBody">
+
+                </tbody>
+
+            </table>
+        </form>
+    </div>
+</div>
+<div id="checkLossModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('checkLossModal')">&times;</span>
+        <table id="checkLossTable">
+            <thead>
+            <tr>
+                <th>Coin</th>
+                <th>Buying price</th>
+                <th>Buying amount</th>
+                <th>Buying sum</th>
+                <th>Average price</th>
+                <th>Average deposit</th>
+                <th>Loss/Profit</th>
+            </tr>
+            </thead>
+            <tbody id="checkLossTableBody">
+            <!-- Здесь будут строки добавленные динамически -->
+            </tbody>
+        </table>
+        <button onclick="addRow()">Добавить строку</button>
+    </div>
+</div>
+<script src="script.js"></script>
+</html>
