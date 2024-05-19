@@ -44,6 +44,7 @@
         <th>Name</th>
         <th>Amount</th>
         <th>Deposit</th>
+        <th>Average price</th>
         <th>Withdrawal</th>
         <th>Current Price</th>
         <th>Current Balance</th>
@@ -80,6 +81,7 @@
     tr:nth-child(even) {
         background-color: #f2f2f2; /* Задаем светло-серый цвет фона для четных строк */
     }
+
     .modal {
         display: none; /* Скрываем модальное окно по умолчанию */
         position: fixed;
@@ -89,7 +91,7 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Полупрозрачный черный фон */
+        background-color: rgba(0, 0, 0, 0.4); /* Полупрозрачный черный фон */
     }
 
     .modal-content {
@@ -156,7 +158,7 @@
                 <thead>
                 <tr>
                     <th>id</th>
-<!--                    <th>name</th>-->
+                    <!--                    <th>name</th>-->
                     <th>amount</th>
                     <th>opTime</th>
                     <th>operationPrice</th>
@@ -176,21 +178,36 @@
         <table id="checkLossTable">
             <thead>
             <tr>
-                <th>Coin</th>
+                <th>Coin
+                    <button class="image-button" onclick="addRow()">
+                        <img src="images/dobavit.png" width="20" height="20">
+                    </button>
+                </th>
                 <th>Buying price</th>
                 <th>Buying amount</th>
                 <th>Buying sum</th>
-                <th>Average price</th>
+                <th>Average rate</th>
                 <th>Average deposit</th>
-                <th>Loss/Profit</th>
+                <th>Available balance by current price</th>
             </tr>
             </thead>
             <tbody id="checkLossTableBody">
             <!-- Здесь будут строки добавленные динамически -->
             </tbody>
         </table>
-        <button onclick="addRow()">Добавить строку</button>
+        <button class="clear" onclick="clear()">Clear</button>
+        <br/>
+
     </div>
 </div>
+<style>
+    .image-button {
+        background-image: url('images/dobavit.png');
+        width: 20px; /* Ширина изображения */
+        height: 20px; /* Высота изображения */
+        border: none; /* Убрать границу */
+        cursor: pointer; /* Изменить курсор при наведении */
+    }
+</style>
 <script src="script.js"></script>
 </html>

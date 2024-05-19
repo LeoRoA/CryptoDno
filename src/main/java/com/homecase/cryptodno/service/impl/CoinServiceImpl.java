@@ -42,19 +42,25 @@ public class CoinServiceImpl implements CoinService {
         double amount = 0.0;
         double price = 0.0;
         double deposit = 0.0;
+        double sumDepAmount = 0.0;
+//        double sumWdAmount = 0.0;
         double withdrawal = 0.0;
         for (CoinsOperation operation: operations) {
              amount = operation.getAmount();
              price = operation.getPrice();
+
             if (amount>0) {
                 deposit += amount * price;
+                sumDepAmount += amount;
             } else{
                 withdrawal+=abs(amount*price);
+//                sumWdAmount += abs(amount);
             }
         }
         coinDto.setName(coin.getName());
         coinDto.setAmount(operations.stream().mapToDouble(CoinsOperation::getAmount).sum());
         coinDto.setDeposit(deposit);
+        coinDto.setAveragePrice(deposit/sumDepAmount);
         coinDto.setWithdrawal(withdrawal);
 
         return coinDto;
