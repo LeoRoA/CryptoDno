@@ -20,4 +20,7 @@ public interface CoinService {
     List<String> getAllNames();
 
     List<String> getAvailableNames();
+
+    double getPrice(String coinName);
+    void setPrice(String coinName, double currentPrice);
 }

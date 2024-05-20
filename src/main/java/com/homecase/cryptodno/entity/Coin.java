@@ -20,5 +20,8 @@ public class Coin {
     @Column(name = "name",nullable = false,unique = true)
     private String name;
 
+    @Column(name = "currentPrice")
+    private double currentPrice;
+
 
 }

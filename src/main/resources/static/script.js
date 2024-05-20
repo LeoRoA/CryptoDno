@@ -41,8 +41,8 @@ function updateMainTable(coins) {
             <td>${coin.name}</td>
             <td>${coin.amount}</td>
             <td>${coin.deposit.toFixed(2)}</td>
-            <td>${coin.averagePrice}</td>
             <td>${coin.withdrawal}</td>
+            <td>${coin.averagePrice}</td>
             <td>${coin.currentPrice}</td>
             <td>${coin.currentBalance.toFixed(2)}</td>
             <td>${coin.lossProfit.toFixed(2)}</td>
@@ -170,8 +170,8 @@ function updateHistoryTable(coinName) {
             <td>${coin.id}</td>
 <!--            <td>${coin.name}</td>-->
             <td>${coin.amount}</td>
-            <td>${coin.opTime}</td>
             <td>${coin.operationPrice}</td>
+            <td>${coin.opTime}</td>
         `;
                 tableBody.appendChild(row);
             });
@@ -389,7 +389,7 @@ function closeModal() {
     modalSell.style.display = 'none';
     modalHistory.style.display = 'none';
     modalCheckLoss.style.display = 'none'
-    loadCoins();
+    // loadCoins();
 }
 
 // Обработчик события нажатия клавиши

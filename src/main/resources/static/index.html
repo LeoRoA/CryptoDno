@@ -37,18 +37,19 @@
     <title>Coins</title>
 
 </head>
-<body>
+<h1>Данные криптокошелька</h1>
+
 <table id="coinsTable">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Amount</th>
-        <th>Deposit</th>
-        <th>Average price</th>
-        <th>Withdrawal</th>
-        <th>Current Price</th>
-        <th>Current Balance</th>
-        <th>Loss Profit</th>
+        <th>Название</th>
+        <th>Количество</th>
+        <th>Внесено $</th>
+        <th>Выведено $</th>
+        <th>Средний курс в портфеле</th>
+        <th>Текущая цена</th>
+        <th>Баланс по текущей цене</th>
+        <th>Прибыль</th>
     </tr>
     </thead>
     <tbody id="coinTableBody">
@@ -115,13 +116,34 @@
         text-decoration: none;
         cursor: pointer;
     }
+    button{}
+        .focus {background: coral;
+        border: none }
+
 </style>
-<button onclick="buyCoin()">Buy</button>
-<button onclick="sellCoin()">Sell</button>
-<button onclick="getHistory()">History</button>
-<button onclick="checkLossCoin()">Check loss</button>
-<button onclick="findBest()">What take?</button>
-<button onclick="updatePrices()">Update</button>
+<button onclick="buyCoin()">Внести покупки</button>
+<button onclick="sellCoin()">Внести продажи</button>
+<button onclick="getHistory()">История операций</button>
+<button onclick="checkLossCoin()">Планирование покупок</button>
+<button onclick="findBest()" disabled>What take?</button>
+<body>
+<button onclick="updatePrices()">Обновить таблицу</button>
+
+<p>
+    Эта таблица предназначена для отображения информации о криптовалютах, доступных в вашем кошельке.<br>
+    Здесь вы можете увидеть:
+<ul>
+    <li>сколько затрачено на приобретение каждой криптовалюты,</li>
+    <li>количество,</li>
+    <li>сколько средств выведено,</li>
+    <li>среднюю цену приобретенных монет,</li>
+    <li>текущий курс и соответствующий баланс,</li>
+    <li>прибыль/убыток для текущего баланса с учетом выведенных средств.</li>
+</ul>
+Для актуализации данных необходимо вносить все покупки и продажи.<br>
+Помимо этого доступна история операций покупки и продажи для каждой криптовалюты.<br>
+Для расчета возможной прибыли или убытков при изменении курса используйте "Планирование покупок".
+</p>
 
 </body>
 <!-- Модальное окно -->
@@ -134,12 +156,13 @@
             <select id="coinName" name="coinName">
 
                 <!-- Добавьте остальные варианты монет -->
-            </select>
-            <label for="amount">Amount:</label>
-            <input type="text" id="amount" name="amount">
-            <label for="opTime">Operation Time:</label>
-            <input type="datetime-local" id="opTime" name="opTime">
-            <input type="text" id="operationPrice" name="operationPrice">
+            </select><br>
+            <label for="amount">Количество:</label>
+            <input type="text" id="amount" name="amount"><br>
+            <label for="opTime">Цена:</label>
+            <input type="text" id="operationPrice" name="operationPrice"><br>
+            <label for="opTime">Время проведния операции:</label>
+            <input type="datetime-local" id="opTime" name="opTime"><br>
             <button type="button" onclick="submitForm()">Submit</button>
         </form>
     </div>
@@ -160,8 +183,8 @@
                     <th>id</th>
                     <!--                    <th>name</th>-->
                     <th>amount</th>
-                    <th>opTime</th>
                     <th>operationPrice</th>
+                    <th>opTime</th>
                 </tr>
                 </thead>
                 <tbody id="historyTableBody">
@@ -179,16 +202,16 @@
             <thead>
             <tr>
                 <th>Coin
-                    <button class="image-button" onclick="addRow()">
-                        <img src="images/dobavit.png" width="20" height="20">
+                    <button class="focus" onclick="addRow()">
+                        +
                     </button>
                 </th>
-                <th>Buying price</th>
-                <th>Buying amount</th>
-                <th>Buying sum</th>
-                <th>Average rate</th>
-                <th>Average deposit</th>
-                <th>Available balance by current price</th>
+                <th>Количество</th>
+                <th>Цена операции</th>
+                <th>Сумма</th>
+                <th>Средний курс</th>
+                <th>Депозит</th>
+                <th>Возможный баланс при текущей цене</th>
             </tr>
             </thead>
             <tbody id="checkLossTableBody">
@@ -200,14 +223,14 @@
 
     </div>
 </div>
-<style>
-    .image-button {
-        background-image: url('images/dobavit.png');
-        width: 20px; /* Ширина изображения */
-        height: 20px; /* Высота изображения */
-        border: none; /* Убрать границу */
-        cursor: pointer; /* Изменить курсор при наведении */
-    }
-</style>
+<!--<style>-->
+<!--    .image-button {-->
+<!--        background-image: url('images/dobavit.png');-->
+<!--        width: 20px; /* Ширина изображения */-->
+<!--        height: 20px; /* Высота изображения */-->
+<!--        border: none; /* Убрать границу */-->
+<!--        cursor: pointer; /* Изменить курсор при наведении */-->
+<!--    }-->
+<!--</style>-->
 <script src="script.js"></script>
 </html>

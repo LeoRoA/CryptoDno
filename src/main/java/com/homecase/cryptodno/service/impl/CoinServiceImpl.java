@@ -13,6 +13,7 @@ import com.homecase.cryptodno.service.CoinService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -131,7 +132,27 @@ public class CoinServiceImpl implements CoinService {
     public List<String> getAllNames() {
         return coinRepository.findAll().stream().map(Coin::getName).collect(Collectors.toList());
     }
-@Override
+
+    @Override
+    public double getPrice(String coinName) {
+        return coinRepository.findByName(coinName).get().getCurrentPrice();
+    }
+
+    @Override
+    public void setPrice(String coinName, double currentPrice) {
+        Optional<Coin> optionalCoin = coinRepository.findByName(coinName);
+        if (optionalCoin.isPresent()) {
+            Coin coin = optionalCoin.get();
+            coin.setCurrentPrice(currentPrice);
+            coinRepository.save(coin);
+        } else {
+            Coin newCoin = new Coin();
+            newCoin.setName(coinName);
+            newCoin.setCurrentPrice(currentPrice);
+        }
+    }
+
+    @Override
     public List<String> getAvailableNames(){
          Set<Integer> listId = coinsOperationRepository.findAll()
                  .stream()

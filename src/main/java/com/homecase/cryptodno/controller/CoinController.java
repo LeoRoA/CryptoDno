@@ -7,7 +7,6 @@ import com.homecase.cryptodno.dto.ResponseWrapperCoinsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import com.homecase.cryptodno.service.CoinService;
 import retrofit2.Call;
@@ -15,11 +14,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.StreamUtils;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -72,10 +68,16 @@ public class CoinController {
 
 //                    if (coinPriceJson!= null && coinPriceJson.has("usd")) {
                     usdPrice = coinPriceJson.getAsJsonObject(coinName).get("usd").getAsDouble();
+                System.out.println(coinName);
+                coinService.setPrice(coinName,usdPrice);
 //                    coinDto.setCurrentPrice(usdPrice);
 //                }
             } else {
                 System.out.println("Failed to update price for " + coinName + ". Error: " + response.errorBody().string());
+//                JsonObject cachedData = dataCache.getData(coinName);
+                // Возвращаем данные из кэша
+//                usdPrice = cachedData.getAsJsonObject(coinName).get("usd").getAsDouble();
+                usdPrice = coinService.getPrice(coinName);
             }
         } catch (IOException e) {
             e.printStackTrace();
