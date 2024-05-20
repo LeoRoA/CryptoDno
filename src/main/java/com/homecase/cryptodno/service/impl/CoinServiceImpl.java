@@ -88,7 +88,15 @@ public class CoinServiceImpl implements CoinService {
 //    }
     private CoinsOperationDto addNewOperation(CoinsOperationDto coinsOperationDto, boolean buy){
         CoinsOperation newCoinsOperation = new CoinsOperation();
-        newCoinsOperation.setCoinId(coinRepository.findByName(coinsOperationDto.getName()).get().getId());
+        Optional<Coin> optionalCoin = coinRepository.findByName(coinsOperationDto.getName());
+        if(optionalCoin.isPresent()){
+            newCoinsOperation.setCoinId(optionalCoin.get().getId());
+        } else{
+            Coin newCoin = new Coin();
+            newCoin.setName(coinsOperationDto.getName());
+            coinRepository.save(newCoin);
+            newCoinsOperation.setCoinId(coinRepository.findByName(coinsOperationDto.getName()).get().getId());
+        }
         newCoinsOperation.setPrice(coinsOperationDto.getOperationPrice());
         newCoinsOperation.setOpDate(coinsOperationDto.getOpTime());
         newCoinsOperation.setAmount(buy? coinsOperationDto.getAmount():(-coinsOperationDto.getAmount()));
@@ -149,6 +157,7 @@ public class CoinServiceImpl implements CoinService {
             Coin newCoin = new Coin();
             newCoin.setName(coinName);
             newCoin.setCurrentPrice(currentPrice);
+            coinRepository.save(newCoin);
         }
     }
 
