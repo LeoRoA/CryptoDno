@@ -1,134 +1,126 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Crypto Dashboard</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h1>Crypto Dashboard</h1>-->
-<!--<table id="cryptoTable">-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <th>Name</th>-->
-<!--        <th>Amount</th>-->
-<!--        <th>Deposit</th>-->
-<!--        <th>Withdrawal</th>-->
-<!--        <th>Current Price</th>-->
-<!--        <th>Current Balance</th>-->
-<!--        <th>Loss/Profit</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody id="cryptoTableBody">-->
-<!--    &lt;!&ndash; Table rows will be added dynamically via JavaScript &ndash;&gt;-->
-<!--    </tbody>-->
-<!--</table>-->
-<!--<button onclick="buyCoin()">Buy</button>-->
-<!--<button onclick="sellCoin()">Sell</button>-->
-<!--<button onclick="updatePrices()">Update</button>-->
-<!--<script src="script.js"></script>-->
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coins</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
 
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed; /* Важно для адаптивности */
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+            word-wrap: break-word;
+            min-width: 100px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-sellContent {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 450px; /* Максимальная ширина для модального окна */
+            overflow-x: auto; /* Позволяет прокрутку при переполнении */
+        }
+
+        .modal-sellContent form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-sellContent .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-sellContent .form-group label {
+            margin-right: 10px;
+            flex: 2; /* Занимает все доступное пространство, кроме полей ввода */
+            text-align: left; /* Выровнять текст по левому краю */
+        }
+
+        .modal-sellContent .form-group input {
+            flex: 1; /* Занимает больше пространства для ввода */
+            text-align: right; /* Выровнять текст по правому краю */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 1000px; /* Максимальная ширина для модального окна */
+            overflow-x: auto; /* Позволяет прокрутку при переполнении */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button.focus {
+            background-color: #888888;
+            border: none;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                padding: 5px;
+                min-width: 80px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
 </head>
-<h1>Данные криптокошелька</h1>
-
-<table id="coinsTable">
-    <thead>
-    <tr>
-        <th>Название</th>
-        <th>Количество</th>
-        <th>Внесено $</th>
-        <th>Выведено $</th>
-        <th>Средний курс в портфеле</th>
-        <th>Текущая цена</th>
-        <th>Баланс по текущей цене</th>
-        <th>Прибыль</th>
-    </tr>
-    </thead>
-    <tbody id="coinTableBody">
-
-    </tbody>
-
-</table>
-<style>
-    table {
-        border-collapse: collapse; /* Объединяем границы ячеек */
-        width: 100%; /* Ширина таблицы */
-    }
-
-    /* Применяем стили к заголовкам столбцов */
-    th {
-        background-color: #f2f2f2; /* Задаем серый цвет фона */
-        border: 1px solid #dddddd; /* Задаем границу для заголовков */
-        padding: 8px; /* Задаем отступ внутри ячеек */
-        text-align: left; /* Выравниваем текст по левому краю */
-    }
-
-    /* Применяем стили к ячейкам */
-    td {
-        border: 1px solid #dddddd; /* Задаем границу для ячеек */
-        padding: 8px; /* Задаем отступ внутри ячеек */
-        text-align: left; /* Выравниваем текст по левому краю */
-    }
-
-    /* Применяем стили для четных строк */
-    tr:nth-child(even) {
-        background-color: #f2f2f2; /* Задаем светло-серый цвет фона для четных строк */
-    }
-
-    .modal {
-        display: none; /* Скрываем модальное окно по умолчанию */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4); /* Полупрозрачный черный фон */
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    button{}
-        .focus {background: coral;
-        border: none }
-
-</style>
-<button onclick="buyCoin()">Внести покупки</button>
-<button onclick="sellCoin()">Внести продажи</button>
-<button onclick="getHistory()">История операций</button>
-<button onclick="checkLossCoin()">Планирование покупок</button>
-<button onclick="findBest()" disabled>What take?</button>
 <body>
-<button onclick="updatePrices()">Обновить таблицу</button>
 
+<h1>Данные криптокошелька</h1>
 <p>
     Эта таблица предназначена для отображения информации о криптовалютах, доступных в вашем кошельке.<br>
     Здесь вы можете увидеть:
@@ -145,56 +137,113 @@
 Для расчета возможной прибыли или убытков при изменении курса используйте "Планирование покупок".
 </p>
 
-</body>
-<!-- Модальное окно -->
-<div id="sellBuyModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <!-- Форма для покупки/продажи монеты -->
-        <form id="coinForm">
-            <label for="coinName">Coin Name:</label>
-            <select id="coinName" name="coinName">
+<table id="coinsTable">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Количество</th>
+        <th>Внесено $</th>
+        <th>Выведено $</th>
+        <th>Средний курс в портфеле</th>
+        <th>Текущая цена</th>
+        <th>Баланс по текущей цене</th>
+        <th>Прибыль</th>
+    </tr>
+    </thead>
+    <tbody id="coinTableBody">
+    </tbody>
+</table>
 
-                <!-- Добавьте остальные варианты монет -->
-            </select><br>
-            <label for="amount">Количество:</label>
-            <input type="text" id="amount" name="amount"><br>
-            <label for="opTime">Цена:</label>
-            <input type="text" id="operationPrice" name="operationPrice"><br>
-            <label for="opTime">Время проведния операции:</label>
-            <input type="datetime-local" id="opTime" name="opTime"><br>
+<button onclick="buyCoin()">Внести покупки</button>
+<button onclick="sellCoin()">Внести продажи</button>
+<button onclick="getHistory()">История операций</button>
+<button onclick="checkLossCoin()">Планирование покупок</button>
+<button onclick="findBest()" disabled>What take?</button>
+<button onclick="updatePrices()">Обновить таблицу</button>
+
+
+
+<!-- Модальное окно для покупки/продажи -->
+<div id="sellBuyModal" class="modal">
+    <div class="modal-sellContent">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <!--        <form id="coinForm">-->
+        <form id="sellBuyTable">
+            <div class="form-group">
+                <label for="coinName">Coin Name:</label>
+                <select id="coinName" name="coinName" onchange="chooseCoin(this)">
+
+                </select><br><br>
+            </div>
+            <div class="form-group">
+                <label for="amount">Количество:</label>
+                <input type="text" id="amount" name="amount"><br><br>
+            </div>
+            <div class="form-group">
+                <label for="operationPrice">Цена:</label>
+                <input type="text" id="operationPrice" name="operationPrice"><br><br>
+            </div>
+            <div class="form-group">
+                <label for="opTime">Время проведения операции:</label>
+                <input type="datetime-local" id="opTime" name="opTime"><br><br>
+            </div>
             <button type="button" onclick="submitForm()">Submit</button>
         </form>
     </div>
 </div>
+
+<!--<div id="addBuyModal" class="modal">-->
+<!--    <div class="modal-sellContent">-->
+<!--        <span class="close" onclick="closeModal()">&times;</span>-->
+<!--        &lt;!&ndash;        <form id="coinForm">&ndash;&gt;-->
+<!--        <form>-->
+<!--            <div class="form-group">-->
+<!--                <label for="coinName">Coin Name:</label>-->
+<!--                <input type="text" id="coinName" name="coinName"><br><br>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="amount">Количество:</label>-->
+<!--                <input type="text" id="amount" name="amount"><br><br>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="operationPrice">Цена:</label>-->
+<!--                <input type="text" id="operationPrice" name="operationPrice"><br><br>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="opTime">Время проведения операции:</label>-->
+<!--                <input type="datetime-local" id="opTime" name="opTime"><br><br>-->
+<!--            </div>-->
+<!--            <button type="button" onclick="submitForm()">Submit</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!-- Модальное окно для истории операций -->
 <div id="historyModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('historyModal')">&times;</span>
-        <!-- Форма для истории покупок одной монеты -->
         <form id="historyForm">
             <label for="coinHistoryName">Coin Name:</label>
             <select id="coinHistoryName" name="coinHistoryName">
-
-                <!-- Добавьте остальные варианты монет -->
+                <!-- Добавьте варианты монет -->
             </select>
             <table id="historyTable">
                 <thead>
                 <tr>
                     <th>id</th>
-                    <!--                    <th>name</th>-->
                     <th>amount</th>
                     <th>operationPrice</th>
                     <th>opTime</th>
                 </tr>
                 </thead>
                 <tbody id="historyTableBody">
-
                 </tbody>
-
             </table>
         </form>
     </div>
 </div>
+
+<!-- Модальное окно для планирования покупок -->
 <div id="checkLossModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('checkLossModal')">&times;</span>
@@ -202,9 +251,7 @@
             <thead>
             <tr>
                 <th>Coin
-                    <button class="focus" onclick="addRow()">
-                        +
-                    </button>
+                    <button class="focus" onclick="addRow()">+</button>
                 </th>
                 <th>Количество</th>
                 <th>Цена операции</th>
@@ -215,22 +262,13 @@
             </tr>
             </thead>
             <tbody id="checkLossTableBody">
-            <!-- Здесь будут строки добавленные динамически -->
+            <!-- Динамически добавленные строки -->
             </tbody>
         </table>
-        <button class="clear" onclick="clear()">Clear</button>
-        <br/>
-
+        <button onclick="clearModal()">Clear</button>
     </div>
 </div>
-<!--<style>-->
-<!--    .image-button {-->
-<!--        background-image: url('images/dobavit.png');-->
-<!--        width: 20px; /* Ширина изображения */-->
-<!--        height: 20px; /* Высота изображения */-->
-<!--        border: none; /* Убрать границу */-->
-<!--        cursor: pointer; /* Изменить курсор при наведении */-->
-<!--    }-->
-<!--</style>-->
+
 <script src="script.js"></script>
+</body>
 </html>

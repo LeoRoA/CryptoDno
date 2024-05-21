@@ -17,11 +17,11 @@ public class Coin {
     @Column(nullable = false)
     private int id;
 
-    @Column(name = "name",nullable = false,unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "currentPrice")
-    private double currentPrice;
+    private double currentPrice = 0.0;
 
 
 }
